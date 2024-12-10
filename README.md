@@ -37,3 +37,17 @@ $flag = str_rot13($flag);
 echo $flag; # FLAG{c564ca8b-5c94-4446-aba4-955148676bfc}
 
 ```
+
+## Challenge 3
+
+Ở thử thách này, chúng ta được yêu cầu nhập vào giá trị thông qua tham số `number`, nếu đúng bằng số `1337` mới nhận được flag. Tuy nhiên, chúng ta không thể nhập thẳng vào số `1337`.
+
+![image](images/challenge-3/image-1.png)
+
+Nhưng do có hàm `intval($number, 0)` nên chúng ta có thể sử dụng các cách bên dưới để giá trị của `number` được chuyển đổi thành số `1337`. Từ đó, chúng ta sẽ lấy flag thành công.
+
+![image](images/challenge-3/image-2.png)
+
+![image](images/challenge-3/image-3.png)
+
+![image](images/challenge-3/image-4.png)

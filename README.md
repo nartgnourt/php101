@@ -51,3 +51,17 @@ Nhưng do có hàm `intval($number, 0)` nên chúng ta có thể sử dụng cá
 ![image](images/challenge-3/image-3.png)
 
 ![image](images/challenge-3/image-4.png)
+
+## Challenge 4
+
+![image](images/challenge-4/image-1.png)
+
+Chúng ta được yêu cầu nhập vào 2 tham số `0` và `1` chứa giá trị khác nhau nhưng giá trị MD5 hash của chúng phải giống nhau.
+
+Do server sử dụng phiên bản PHP 7.4.33 nên chúng ta có thể truyền vào lần lượt 2 mảng chứa giá trị khác nhau để khiến cho hàm `md5()` trả về `NULL` và khi so sánh sẽ trả về `true`.
+
+![image](images/challenge-4/image-2.png)
+
+Vậy chúng ta thêm `?0[]&1[]=b` vào URL và gửi request sẽ có được flag.
+
+![image](images/challenge-4/image-3.png)

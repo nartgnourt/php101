@@ -65,3 +65,57 @@ Do server sử dụng phiên bản PHP 7.4.33 nên chúng ta có thể truyền 
 Vậy chúng ta thêm `?0[]&1[]=b` vào URL và gửi request sẽ có được flag.
 
 ![image](images/challenge-4/image-3.png)
+
+## Challenge 5
+
+![image](images/challenge-5/image-1.png)
+
+Tại thử thách này, chúng ta được yêu cầu nhập vào một tham số `inp` thông qua URL.
+
+Trong source code, chúng ta để ý dữ liệu truyền vào tham số `inp` được đưa tới hàm `file_get_contents()`, hàm này được dùng để đọc file, ngoài ra nếu chúng ta truyền vào URL, nó cũng thực hiện gửi HTTP request và trả về response.
+
+Còn hàm `simplexml_load_string()` được dùng để chuyển đổi chuỗi dữ liệu XML thành SimpleXMLElement object, cho phép chúng ta làm việc với dữ liệu XML trong PHP.
+
+Nếu chuỗi nằm trong phần tử `g` của XML là `flagggggggggggggg`, thì chúng ta sẽ nhận được flag.
+
+Với đoạn XML sau, chúng ta cùng kiểm tra trên [PHP Sandbox](https://onlinephp.io/).
+
+```xml
+<root>
+    <f>
+        <l>
+            <a>
+                <g>flagggggggggggggg</g>
+            </a>
+        </l>
+    </f>
+</root>
+```
+
+![image](images/challenge-5/image-2.png)
+
+Có thể lấy ra chuỗi `flagggggggggggggg`. Vậy làm sao để chúng ta truyền được chuỗi XML trên thông qua tham số `inp`?
+
+Một điều tuyệt vời là hàm `file_get_contents($inp)` có thể gửi HTTP request như mình đã nói ở trên. Do đó, chúng ta sẽ lưu chuỗi XML vào response của [requestrepo](https://requestrepo.com) và lấy URL truyền vào tham số `inp` để khiến hàm đó về chuỗi XML.
+
+![image](images/challenge-5/image-3.png)
+
+Thành công, chúng ta đã lấy được flag:
+
+![image](images/challenge-5/image-4.png)
+
+Ngoài ra, chúng ta cũng có thể sử dụng một số payload sau bằng cách tận dụng [Data URL](https://developer.mozilla.org/en-US/docs/Web/URI/Schemes/data).
+
+```text
+data:text/plain,<root><f><l><a><g>flagggggggggggggg</g></a></l></f></root>
+```
+
+```text
+data:text/,<root><f><l><a><g>flagggggggggggggg</g></a></l></f></root>
+```
+
+```text
+data:,<root><f><l><a><g>flagggggggggggggg</g></a></l></f></root>
+```
+
+![image](images/challenge-5/image-5.png)

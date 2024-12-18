@@ -131,3 +131,25 @@ Vậy để bypass thành công, chúng ta sẽ truyền vào một mảng `numb
 ![image](images/challenge-6/image-2.png)
 
 ![image](images/challenge-6/image-3.png)
+
+## Challenge 7
+
+![image](images/challenge-7/image-1.png)
+
+Thử thách này khá thú vị, nếu đọc code ngay trên trang web, chúng ta thấy để lấy được flag cần phải nhập vào một mảng `u` bằng với mảng `['admin', 'lord']`. Tuy nhiên, phần tử thứ nhất của mảng là `u[0]` lại không được phép là `admin`. Vậy phải làm cách nào đây?
+
+Nếu chúng ta copy code vào VS Code sẽ thấy điều đặc biệt, ký tự `u` đầu tiên đã được thêm một ý tự đặc biệt vào phía sau. Do đó, 2 tham số `u⁠` và `u` này là hoàn toàn khác nhau.
+
+![image](images/challenge-7/image-2.png)
+
+Copy và search Google, chúng ta sẽ biết được thông tin về ký tự đặc biệt này.
+
+![image](images/challenge-7/image-3.png)
+
+Vậy, chúng ta sẽ thêm phần query string bên dưới vào để lấy flag thành công. Chú ý là không cần nhập vào mảng `u[]` bởi khi nhập `u=xxx` thì `$_GET['u'][0]` sẽ trả về `x`, từ đó thoả mãn điều kiện `$_GET['u'][0] !== 'admin'`.
+
+```text
+?u%E2%81%A0[]=admin&u%E2%81%A0[]=lord&u=xxx
+```
+
+![image](images/challenge-7/image-4.png)

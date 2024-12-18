@@ -119,3 +119,15 @@ data:,<root><f><l><a><g>flagggggggggggggg</g></a></l></f></root>
 ```
 
 ![image](images/challenge-5/image-5.png)
+
+## Challenge 6
+
+![image](images/challenge-6/image-1.png)
+
+Thử thách này yêu cầu chúng ta nhập dữ liệu vào tham số `number`, nếu có thể chuyển đổi giá trị đó thành số khác 0 thì chúng ta nhận được flag. Tuy nhiên, tác giả đã sử dụng hàm `preg_match('/[0-9]/', $number)` để chặn chúng ta nhập vào số.
+
+Vậy để bypass thành công, chúng ta sẽ truyền vào một mảng `number` thay vì chuỗi thông thường.
+
+![image](images/challenge-6/image-2.png)
+
+![image](images/challenge-6/image-3.png)

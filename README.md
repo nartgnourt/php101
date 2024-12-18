@@ -153,3 +153,19 @@ Vậy, chúng ta sẽ thêm phần query string bên dưới vào để lấy fl
 ```
 
 ![image](images/challenge-7/image-4.png)
+
+## Challenge 8
+
+![image](images/challenge-8/image-1.png)
+
+Trang web yêu cầu chúng ta nhập dữ liệu qua tham số `u`, nếu giá trị của `u` khác `admin` thì sẽ thực hiện decode URL giá trị đó, giá trị sau khi decode nếu bằng `admin` thì mới trả về flag.
+
+Vậy, chúng ta sẽ encode URL chuỗi `admin` 2 lần (Double URL Encoding) để bypass qua phần kiểm tra `if(preg_match('/admin/', $_GET['u'])) die('no no no');`.
+
+Chúng ta có thể sử dụng luôn tính năng Decoder trong Burp Suite để thực hiện.
+
+![image](images/challenge-8/image-2.png)
+
+Lưu ý là khi chúng ta truyền `%25%36%31%25%36%34%25%36%64%25%36%39%25%36%65` vào tham số `u` nó sẽ được trình duyệt chuyển đổi thành `%2561%2564%256d%2569%256e` là bởi trình duyệt decode trở lại `%61%64%6d%69%6e` và chỉ encode duy nhất ký tự `%` thành `%25`.
+
+![image](images/challenge-8/image-3.png)

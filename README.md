@@ -169,3 +169,23 @@ Chúng ta có thể sử dụng luôn tính năng Decoder trong Burp Suite để
 Lưu ý là khi chúng ta truyền `%25%36%31%25%36%34%25%36%64%25%36%39%25%36%65` vào tham số `u` nó sẽ được trình duyệt chuyển đổi thành `%2561%2564%256d%2569%256e` là bởi trình duyệt decode trở lại `%61%64%6d%69%6e` và chỉ encode duy nhất ký tự `%` thành `%25`.
 
 ![image](images/challenge-8/image-3.png)
+
+## Challenge 9
+
+![image](images/challenge-9/image-1.png)
+
+Thử thách này yêu cầu chúng ta nhập vào chuỗi dưới 28 kí tự thông qua tham số `say`. Nếu chuỗi có `give_me_the_flag` thì chúng ta sẽ nhận được flag.
+
+Tuy nhiên, tác giả đã dùng hàm `preg_replace('/^(.*)flag(.*)$/', 'waf', $_GET['say']);` để thay thế chuỗi chứa từ `flag` thành `waf`.
+
+Vậy chúng ta sẽ bypass bằng cách nào đây?
+
+Chúng ta sẽ tận dụng dấu ngắt dòng bởi vì dấu `.` trong regex sẽ không khớp với nó.
+
+![image](images/challenge-9/image-2.png)
+
+Chúng ta tạo payload bằng cách thực hiện encode URL dấu ngắt dòng thành `%0A`, sau đó thêm vào trước chuỗi `give_me_the_flag`.
+
+Truyền payload vào tham số `say` và gửi request, chúng ta sẽ lấy được flag.
+
+![image](images/challenge-9/image-3.png)

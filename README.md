@@ -189,3 +189,49 @@ Chúng ta tạo payload bằng cách thực hiện encode URL dấu ngắt dòng
 Truyền payload vào tham số `say` và gửi request, chúng ta sẽ lấy được flag.
 
 ![image](images/challenge-9/image-3.png)
+
+## Challenge 10
+
+![image](images/challenge-10/image-1.png)
+
+Thử thách này liên quan đến việc thực hiện khai thác Deserialization cũng như bypass tên tham số trong PHP. Một thử thách tương tự là [Sekai Game Start](https://github.com/project-sekai-ctf/sekaictf-2022/tree/main/web/sekai-game-start) trong SekaiCTF 2022.
+
+Chúng ta có thể thấy, server mong muốn nhận vào một chuỗi ở dạng serialized từ tham số `get_flag.php` trong URL. Tuy nhiên, PHP sẽ tự động chuyển đổi ký tự `.` thành ký tự `_` trong tên tham số nên chúng ta không thể đi vào khối `if`. Tham khảo tại [PHP GET url param with dot in name](https://stackoverflow.com/questions/33126289/php-get-url-param-with-dot-in-name).
+
+![image](images/challenge-10/image-2.png)
+
+Chúng ta có thể bypass bằng cách đổi ký tự `_` trong tên tham số thành ký tự `[` để khiến PHP tự động chuyển nó lại thành `_` mà vẫn giữ nguyên dấu `.`. Từ đó, chúng ta có được tên key chính xác:
+
+![image](images/challenge-10/image-3.png)
+
+Tiếp đến, chúng ta cùng phân tích class `Get_Flag`, nó có 2 magic methods là `__destruct()` và `__wakeup()`.
+
+Tại method `__destruct()`, thực hiện kiểm tra nếu thuộc tính `get` là `True` thì trả về flag cho chúng ta. Method này tự động thực thi khi đến cuối script.
+
+```php
+public function __destruct() {
+    if ($this->get === True) {
+        die(print_flag(10));
+    }
+}
+```
+
+Tại method `__wakeup()`, thực hiện gán lại giá trị của thuộc tính `get` thành `False`. Method này được thực thi khi gọi hàm `unserialize()`. Tức là nó sẽ được thực thi trước method `__destruct()`.
+
+```php
+public function __wakeup() {
+    $this->get = False;
+}
+```
+
+Vậy, nếu chúng ta gọi hàm `unserialize()` với chuỗi `O:8:"Get_Flag":1:{s:3:"get";b:1;}` thì thuộc tính `get` sẽ luôn là `False` khi nó được kiểm tra trong hàm `__destruct()` và chúng ta không thể nhận được flag.
+
+Theo bài report [Bug #81151](https://bugs.php.net/bug.php?id=81151), chúng ta có thể khiến hàm `__wakeup()` không được thực thi bằng cách truyền vào hàm `unserialize()` chuỗi `C:8:"Get_Flag":0:{}`.
+
+Vậy sử dụng payload cuối cùng bên dưới chúng ta sẽ có được flag.
+
+```text
+?get[flag.php=C:8:"Get_Flag":0:{}
+```
+
+![image](images/challenge-10/image-4.png)
